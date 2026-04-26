@@ -20,9 +20,17 @@ app.get("/", (req, res) => {
 app.use("/api/items", itemRoutes);
 
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error(
+    "Database connection error: MONGO_URI is not set. Please configure the MONGO_URI environment variable in Render or your local .env file."
+  );
+  process.exit(1);
+}
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
     app.listen(PORT, () => {
